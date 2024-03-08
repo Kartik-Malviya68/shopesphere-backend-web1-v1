@@ -4,9 +4,7 @@
   "description": "",
   "type": "module",
   "main": "server.js",
-  "engines": {
-    "node": "18x"
-  },
+  
   "scripts": {
     "start": "nodemon server.js"
   },
