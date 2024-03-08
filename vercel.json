@@ -8,12 +8,7 @@
   ],
   
     "rewrites": [{ "source": "/(.*)", "destination": "./src/server.js" }],
-  "routes": [
-    {
-      "src": "/(.*)",
-      "dest": "./src/server.js"
-    }
-  ],
+ 
   "headers": [
     {
       "source": "/(.*)",
