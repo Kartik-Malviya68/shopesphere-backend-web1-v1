@@ -5,7 +5,7 @@
   "type": "module",
   "main": "server.js",
   "engines": {
-    "node": "v21.5.0"
+    "node": "v21"
   },
   "scripts": {
     "start": "nodemon server.js"
