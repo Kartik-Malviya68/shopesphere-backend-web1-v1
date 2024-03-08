@@ -7,7 +7,7 @@
     }
   ],
   
-    "rewrites": [{ "source": "/(.*)", "destination": "src/server.js" }],
+    "rewrites": [{ "source": "/(.*)", "destination": "/" }],
  
   "headers": [
     {
