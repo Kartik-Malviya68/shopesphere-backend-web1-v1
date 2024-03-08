@@ -1,7 +1,7 @@
 import dotenv from "dotenv";
 import express from "express";
-import connectDB from "./dataBase/index.js";
-import productRouter from "./router/productRouter.js";
+import connectDB from "./src/dataBase/index.js";
+import productRouter from "./src/router/productRouter.js";
 import cors from "cors";
 dotenv.config({
   path: "./.env",
@@ -31,7 +31,7 @@ async function main() {
 app.use(express.json());
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-import userRouter from "./router/userRoutes.js";
+import userRouter from "./src/router/userRoutes.js";
 import bodyParser from "body-parser";
 import cookieParser from "cookie-parser";
 
