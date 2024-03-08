@@ -1,0 +1,47 @@
+import dotenv from "dotenv";
+import express from "express";
+import connectDB from "./dataBase/index.js";
+import productRouter from "./router/productRouter.js";
+import cors from "cors";
+dotenv.config({
+  path: "./.env",
+});
+
+const app = express();
+app.use((req, res, next) => {
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader("Access-Control-Allow-Credentials", "true");
+  res.setHeader("Access-Control-Allow-Methods","PUT, POST, GET, DELETE, PATCH, OPTIONS");
+  res.setHeader("Access-Control-Allow-Headers", "content-type")
+  next();
+});
+async function main() {
+  const app = express();
+  app.use(express.json());
+  app.use(cookieParser());
+  app.use(express.urlencoded({ extended: true }));
+  app.use(
+    cors({
+      origin: "*",
+      methods: ["POST", "PUT", "GET", "OPTIONS", "HEAD"],
+      credentials: true,
+    })
+  );
+}
+app.use(express.json());
+app.use(express.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+import userRouter from "./router/userRoutes.js";
+import bodyParser from "body-parser";
+import cookieParser from "cookie-parser";
+
+app.use(`/api/v1/users`, userRouter);
+app.use(`/api/v1/products`, productRouter);
+app.use(bodyParser.json());
+
+connectDB().then(() => {
+  app.listen(4000, () => {
+    console.log(`⚙️ Server is running at port : 4000`);
+  });
+});
+main();
