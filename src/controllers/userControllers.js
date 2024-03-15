@@ -1,7 +1,7 @@
 import dotenv from "dotenv";
 import { User } from "../models/userModel.js";
 import jwt from "jsonwebtoken";
-
+import bcrypt from "bcrypt";
 import { ApiResponse } from "../utils/ApiResponse.js";
 
 async function generateAccessRefreshToken(userId) {
@@ -72,7 +72,7 @@ const registerUser = async (req, res) => {
 const loginUser = async (req, res) => {
   try {
     const { email, passward, username } = req.body;
-    if ((!email || !username) && !passward) {
+    if (!email || (!username && !passward)) {
       return res.status(400).json({
         message: "username or email or phonenumber and passward are required",
       });
@@ -84,7 +84,14 @@ const loginUser = async (req, res) => {
     if (!user) {
       throw new Error(404, "User does not exist");
     }
+    if (!user.passward) {
+      return res.status(500).json({ message: "User passward is missing" });
+    }
+    const passwardMatch = await bcrypt.compare(passward, user.passward);
 
+    if (!passwardMatch) {
+      return res.status(500).json({ message: "Passward is wrong" });
+    }
     const { accessToken, refreshtoken } = await generateAccessRefreshToken(
       user._id
     );
