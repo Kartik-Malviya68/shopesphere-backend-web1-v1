@@ -24,13 +24,13 @@ async function generateAccessRefreshToken(userId) {
 }
 
 const registerUser = async (req, res) => {
-  const { username, email, password } = req.body;
+  const { username, email, passward } = req.body;
   console.log(req.body);
-  const requiredFields = (username, email, password);
+  const requiredFields = (username, email, passward);
   if (!requiredFields) {
     return res.status(400).json({
       message:
-        "fullname, username, email, phonenumber and password are required",
+        "fullname, username, email, phonenumber and passward are required",
     });
   }
 
@@ -47,10 +47,10 @@ const registerUser = async (req, res) => {
   const user = await User.create({
     username,
     email,
-    password,
+    passward,
   });
   const createdUser = await User.findById(user._id).select(
-    "-password -refreshtoken "
+    "-passward -refreshtoken "
   );
 
   if (!createdUser) {
@@ -71,10 +71,10 @@ const registerUser = async (req, res) => {
 };
 const loginUser = async (req, res) => {
   try {
-    const { email, password, username } = req.body;
-    if (!email && !password) {
+    const { email, passward, username } = req.body;
+    if ((!email || !username) && !passward) {
       return res.status(400).json({
-        message: "username or email or phonenumber and password are required",
+        message: "username or email or phonenumber and passward are required",
       });
     }
     const user = await User.findOne({
@@ -90,7 +90,7 @@ const loginUser = async (req, res) => {
     );
     console.log("user._id", user._id);
     const loggedInUser = await User.findById(user._id).select(
-      "-password -refreshtoken"
+      "-passward -refreshtoken"
     );
 
     const options = {
