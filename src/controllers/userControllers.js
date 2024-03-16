@@ -69,55 +69,103 @@ const registerUser = async (req, res) => {
       )
     );
 };
+// const loginUser = async (req, res) => {
+//   try {
+//     const { passward, username, email } = req.body;
+//     // if ((!email || !username) && !passward) {
+//     //   return res.status(400).json({
+//     //     message: "username or email or phonenumber and passward are required",
+//     //   });
+//     // }
+
+//     if (!email) {
+//       return res.status(400).json({
+//         message: "username or email required",
+//       });
+//     }
+
+//     const user = await User.findOne({
+//       $or: [{ username }, { email }],
+//     });
+
+//     if (!user) {
+//       throw new Error(404, "User does not exist");
+//     }
+//     if (!user.passward) {
+//       return res.status(500).json({ message: "User passward is missing" });
+//     }
+//     const passwardMatch = await bcrypt.compare(passward, user.passward);
+
+//     if (!passwardMatch) {
+//       return res.status(500).json({ message: "Passward is wrong" });
+//     }
+//     const { accessToken, refreshtoken } = await generateAccessRefreshToken(
+//       user._id
+//     );
+//     console.log("user._id", user._id);
+//     const loggedInUser = await User.findById(user._id).select(
+//       "-passward -refreshtoken"
+//     );
+
+//     const options = {
+//       httpOnly: true,
+//       secure: true,
+//     };
+
+//     return res
+//       .status(200)
+//       .cookie("accessToken", accessToken, options)
+//       .cookie("refreshAccessToken", refreshtoken, options)
+//       .json({
+//         message: "User logged in successfully",
+//         loggedInUser,
+//         accessToken,
+//         refreshtoken,
+//       });
+//   } catch (error) {
+//     console.log("error accurd", error);
+//   }
+// };
+
 const loginUser = async (req, res) => {
-  try {
-    const { email, passward, username } = req.body;
-    if (!email || (!username && !passward)) {
-      return res.status(400).json({
-        message: "username or email or phonenumber and passward are required",
-      });
-    }
-    const user = await User.findOne({
-      $or: [{ username }, { email }],
-    });
-
-    if (!user) {
-      throw new Error(404, "User does not exist");
-    }
-    if (!user.passward) {
-      return res.status(500).json({ message: "User passward is missing" });
-    }
-    const passwardMatch = await bcrypt.compare(passward, user.passward);
-
-    if (!passwardMatch) {
-      return res.status(500).json({ message: "Passward is wrong" });
-    }
-    const { accessToken, refreshtoken } = await generateAccessRefreshToken(
-      user._id
-    );
-    console.log("user._id", user._id);
-    const loggedInUser = await User.findById(user._id).select(
-      "-passward -refreshtoken"
-    );
-
-    const options = {
-      httpOnly: true,
-      secure: true,
-    };
-
-    return res
-      .status(200)
-      .cookie("accessToken", accessToken, options)
-      .cookie("refreshAccessToken", refreshtoken, options)
-      .json({
-        message: "User logged in successfully",
-        loggedInUser,
-        accessToken,
-        refreshtoken,
-      });
-  } catch (error) {
-    console.log("error accurd", error);
+  const { passward, email } = req.body;
+  if (!email) {
+    return res.status(400).json({ message: "email required" });
   }
+  if (!passward) {
+    return res.status(400).json({ message: "passward required" });
+  }
+  const user = await User.findOne({ email });
+  if (!user) {
+    return res.status(404).json({ message: "User does not exist" });
+  }
+  const checkPassward = bcrypt.compare(passward, user.passward);
+  if (!checkPassward) {
+    return res.status(400).json({ message: "Invalid passward" });
+  }
+  const verifyJWT = jwt.verify(
+    user.refreshtoken,
+    process.env.REFRESH_TOKEN_SECRET
+  );
+  if (!verifyJWT) {
+    return res.status(401).json({ message: "Unauthorized token access" });
+  }
+  const { accessToken, refreshtoken } = await generateAccessRefreshToken(
+    user._id
+  );
+  const loggedInUser = await User.findById(user._id).select(
+    "-passward -refreshtoken"
+  );
+  const options = {
+    httpOnly: true,
+    secure: true,
+  };
+  res.status(200).json({
+    message: "User logged in successfully",
+    loggedInUser,
+    accessToken,
+    refreshtoken,
+  });
 };
 const logoutUser = async (req, res) => {
   try {

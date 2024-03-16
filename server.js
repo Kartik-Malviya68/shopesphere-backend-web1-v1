@@ -11,8 +11,11 @@ const app = express();
 app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader("Access-Control-Allow-Credentials", "true");
-  res.setHeader("Access-Control-Allow-Methods","PUT, POST, GET, DELETE, PATCH, OPTIONS");
-  res.setHeader("Access-Control-Allow-Headers", "content-type")
+  res.setHeader(
+    "Access-Control-Allow-Methods",
+    "PUT, POST, GET, DELETE, PATCH, OPTIONS"
+  );
+  res.setHeader("Access-Control-Allow-Headers", "content-type");
   next();
 });
 async function main() {
@@ -37,6 +40,7 @@ import cookieParser from "cookie-parser";
 
 app.use(`/api/v1/users`, userRouter);
 app.use(`/api/v1/products`, productRouter);
+
 app.use(bodyParser.json());
 
 connectDB().then(() => {
