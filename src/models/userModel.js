@@ -41,6 +41,12 @@ const userModel = new mongoose.Schema(
         color: {
           type: String,
         },
+        price: {
+          type: String,
+        },
+        name: {
+          type: String,
+        },
       },
     ],
 
