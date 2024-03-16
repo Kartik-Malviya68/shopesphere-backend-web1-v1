@@ -2,9 +2,9 @@ import { User } from "../models/userModel.js";
 import jwt from "jsonwebtoken";
 async function addToCart(req, res) {
   try {
-    const { productId, quantity, size, color } = req.body;
+    const { productId, quantity, size, color, price, name } = req.body;
 
-    if (!productId || !quantity || !size || !color) {
+    if (!productId || !quantity || !size || !color || !price || !name) {
       return res
         .status(400)
         .json({ message: "productId, quantity, size, color are required" });
