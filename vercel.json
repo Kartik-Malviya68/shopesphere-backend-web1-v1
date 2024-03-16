@@ -7,8 +7,8 @@
       "config": { "includeFiles": ["dist/**"] }
     }
   ],
-  "rewrites": [{ "source": "/(.*)", "destination": "" }],
-  
+  "rewrites": [{ "source": "/(.*)", "destination": "/" }],
+
   "headers": [
     {
       "source": "/(.*)",
