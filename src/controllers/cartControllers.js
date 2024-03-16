@@ -12,7 +12,7 @@ async function addToCart(req, res) {
     const user = req.user;
 
     const productExist = user.cartItems.find(
-      (item) => item.productId === productId && item.size === size
+      (item) => item.productId === productId 
     );
 
     if (productExist) {
@@ -20,7 +20,7 @@ async function addToCart(req, res) {
     }
 
     if (!productExist) {
-      user.cartItems.push({ productId, quantity, size, color });
+      user.cartItems.push({ productId, quantity, size, color, price, name });
     }
 
     await user.save();
