@@ -27,6 +27,7 @@ async function main() {
     cors({
       origin: "*",
       methods: ["POST", "PUT", "GET", "OPTIONS", "HEAD"],
+      allowedHeaders: ['Content-Type', 'Authorization'],
       credentials: true,
     })
   );
