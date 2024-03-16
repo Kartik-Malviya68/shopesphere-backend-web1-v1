@@ -12,10 +12,7 @@ async function addToCart(req, res) {
     const user = req.user;
 
     const productExist = user.cartItems.find(
-      (item) =>
-        item.productId === productId &&
-        item.size === size &&
-        item.color === color
+      (item) => item.productId === productId && item.size === size
     );
 
     if (productExist) {
