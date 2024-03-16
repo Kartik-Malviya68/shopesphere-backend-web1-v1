@@ -116,6 +116,22 @@ const getProductsByFilter = async (req, res) => {
   }
 };
 
+const getProductBySearch = async (req, res) => {
+  try {
+    const products = await Sneaker.find({
+      name: { $regex: req.query.name, $options: "i" },
+    });
+    if (!products || products.length === 0) {
+      return res.status(404).json({ error: "No products found" });
+    }
+    res.json(products);
+    JSON.stringify(products);
+  } catch (error) {
+    console.error("Error retrieving products:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
 export default {
   ProductController,
   getAllProducts,
@@ -123,4 +139,5 @@ export default {
   deleteProduct,
   updateProduct,
   getProductsByFilter,
+  getProductBySearch,
 };

@@ -10,4 +10,7 @@ router
 router.route("/:id").get(productControllers.getProductById);
 router.route("/del/:id").delete(productControllers.deleteProduct);
 router.route("/update/:id").put(productControllers.updateProduct);
-export default router
+router
+  .route("/getProductsByFilter")
+  .get(productControllers.getProductsByFilter);
+export default router;

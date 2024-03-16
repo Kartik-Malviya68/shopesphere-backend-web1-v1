@@ -10,6 +10,9 @@ router.route("/getUserData").get(getUserData);
 router.route("/login").post(userControllers.loginUser);
 router.route("/addToCart").post(verifyJWT, cartControllers.addToCart);
 router.route("/getCartItems").get(verifyJWT, cartControllers.getCartItems);
+router
+  .route("/removeFromCart/:id")
+  .delete(verifyJWT, cartControllers.removeFromCart);
 //secure routes
 router.route("/logout").post(verifyJWT, userControllers.logoutUser);
 router.route("/refreshAccessToken").post(userControllers.refreshAccessToken);
