@@ -2,22 +2,30 @@ import { User } from "../models/userModel.js";
 import jwt from "jsonwebtoken";
 async function addToCart(req, res) {
   try {
-    const { productId, quantity } = req.body;
+    const { productId, quantity, size, color } = req.body;
 
-    if (!productId || !quantity) {
+    if (!productId || !quantity || !size || !color) {
       return res
         .status(400)
-        .json({ message: "productId and quantity required" });
+        .json({ message: "productId, quantity, size, color are required" });
     }
     const user = req.user;
-    const productIndex = user.cartItems.findIndex(
-      (item) => item.productId.toString() === productId
+
+    const productExist = user.cartItems.find(
+      (item) =>
+        item.productId === productId &&
+        item.size === size &&
+        item.color === color
     );
-    if (productIndex >= 0) {
-      user.cartItems[productIndex].quantity += quantity;
-    } else {
-      user.cartItems.push({ productId, quantity });
+
+    if (productExist) {
+      productExist.quantity += quantity;
     }
+
+    if (!productExist) {
+      user.cartItems.push({ productId, quantity, size, color });
+    }
+
     await user.save();
 
     res.status(200).json({
@@ -29,4 +37,13 @@ async function addToCart(req, res) {
   }
 }
 
-export default { addToCart };
+const getCartItems = async (req, res) => {
+  try {
+    const user = req.user;
+    res.status(200).json({ cartItems: user.cartItems });
+  } catch (error) {
+    res.status(500).json({ message: "Internal server error", error });
+  }
+};
+
+export default { addToCart, getCartItems };
