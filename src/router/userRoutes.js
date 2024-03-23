@@ -5,7 +5,7 @@ import { verifyJWT } from "../middlewares/authMddleware.js";
 import cartControllers from "../controllers/cartControllers.js";
 
 const router = Router();
-router.route("/register").post(userControllers.registerUser);
+router.route("/register").post(verifyJWT, userControllers.registerUser);
 router.route("/getUserData").get(getUserData);
 router.route("/login").post(userControllers.loginUser);
 router.route("/addToCart").post(verifyJWT, cartControllers.addToCart);

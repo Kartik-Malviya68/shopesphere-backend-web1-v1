@@ -49,9 +49,7 @@ const registerUser = async (req, res) => {
     email,
     password,
   });
-  const createdUser = await User.findById(user._id).select(
-    "-password -refreshtoken "
-  );
+  const createdUser = await User.findById(user._id).select("-password ");
 
   if (!createdUser) {
     return res.status(500).json({
