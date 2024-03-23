@@ -14,7 +14,7 @@ router
   .route("/removeFromCart/:id")
   .delete(verifyJWT, cartControllers.removeFromCart);
 //secure routes
-router.route("/logout").post(verifyJWT, userControllers.logoutUser);
+router.route("/logout").post( userControllers.logoutUser);
 router.route("/refreshAccessToken").post(userControllers.refreshAccessToken);
 router.route("/checkTokenExpiry").post(verifyJWT, userControllers.checkTokenExpiry);
 export default router;
