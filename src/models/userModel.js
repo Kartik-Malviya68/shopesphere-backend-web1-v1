@@ -21,7 +21,7 @@ const userModel = new mongoose.Schema(
       lowercase: true,
       trim: true,
     },
-    passward: {
+    password: {
       type: String,
       required: true,
       trim: true,
@@ -63,13 +63,13 @@ const userModel = new mongoose.Schema(
 );
 
 userModel.pre("save", async function (next) {
-  if (!this.isModified("passward")) return next();
-  this.passward = await bcrypt.hashSync(this.passward, 10);
+  if (!this.isModified("password")) return next();
+  this.password = await bcrypt.hashSync(this.password, 10);
   next();
 });
 
-userModel.methods.ispasswardMatch = async function (passward) {
-  return await bcrypt.compare(passward, this.passward);
+userModel.methods.ispasswordMatch = async function (password) {
+  return await bcrypt.compare(password, this.password);
 };
 
 userModel.methods.generateAccessToken = function () {
@@ -78,7 +78,7 @@ userModel.methods.generateAccessToken = function () {
       _id: this._id,
       username: this.username,
       email: this.email,
-      passward: this.passward,
+      password: this.password,
     },
     process.env.ACCESS_TOKEN_SECRET,
     {

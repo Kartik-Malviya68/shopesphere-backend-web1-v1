@@ -132,6 +132,9 @@ const getProductBySearch = async (req, res) => {
   }
 };
 
+
+
+
 export default {
   ProductController,
   getAllProducts,
