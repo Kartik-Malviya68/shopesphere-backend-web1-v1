@@ -84,13 +84,13 @@ const loginUser = async (req, res) => {
   if (!checkpassword) {
     return res.status(400).json({ message: "Invalid password" });
   }
-  const verifyJWT = jwt.verify(
-    user.refreshtoken,
-    process.env.REFRESH_TOKEN_SECRET
-  );
-  if (!verifyJWT) {
-    return res.status(401).json({ message: "Unauthorized token access" });
-  }
+  // const verifyJWT = jwt.verify(
+  //   user.refreshtoken,
+  //   process.env.REFRESH_TOKEN_SECRET
+  // );
+  // if (!verifyJWT) {
+  //   return res.status(401).json({ message: "Unauthorized token access" });
+  // }
   const { accessToken, refreshtoken } = await generateAccessRefreshToken(
     user._id
   );
@@ -108,6 +108,7 @@ const loginUser = async (req, res) => {
     refreshtoken,
   });
 };
+
 const logoutUser = async (req, res) => {
   try {
     await User.findByIdAndUpdate(
