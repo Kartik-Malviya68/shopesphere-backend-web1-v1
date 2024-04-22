@@ -54,7 +54,6 @@ app.use(`/api/v1/products`, productRouter);
 app.use(
   cors({
     origin: ["http://localhost:3000", "https://shopsphere-web-v1.vercel.app"],
-    methods: ["GET", "PUT", "POST", "DELETE"],
     credentials: true,
   })
 );
