@@ -51,8 +51,19 @@ import cookieParser from "cookie-parser";
 app.use(`/api/v1/users`, userRouter);
 app.use(`/api/v1/products`, productRouter);
 
+app.use(
+  cors({
+    origin: [
+      "http://localhost:3000",
+      "https://shopsphere-web-v1.vercel.app",
+    ],
+    methods: ["GET", "PUT", "POST", "DELETE"],
+    credentials: true,
+  })
+);
+
 app.use(bodyParser.json());
-app.use(cookieParser())
+app.use(cookieParser());
 
 connectDB().then(() => {
   app.listen(4000, () => {
