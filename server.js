@@ -33,14 +33,14 @@ async function main() {
   );
 }
 
-// app.use((req, res, next) => {
-//   res.header("Access-Control-Allow-Origin", "*"); // Specify the origin of your frontend application
-//   res.header(
-//     "Access-Control-Allow-Headers",
-//     "Origin, X-Requested-With, Content-Type, Accept, Authorization"
-//   );
-//   next();
-// });
+app.use((req, res, next) => {
+  res.header("Access-Control-Allow-Origin", "http://localhost:3000"); // Specify the origin of your frontend application
+  res.header(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type, Accept, Authorization"
+  );
+  next();
+});
 
 app.use(bodyParser.urlencoded({ extended: true }));
 import userRouter from "./src/router/userRoutes.js";
