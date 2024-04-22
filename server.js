@@ -34,7 +34,6 @@ async function main() {
 }
 
 app.use((req, res, next) => {
-  res.header("Access-Control-Allow-Origin", "*"); // Specify the origin of your frontend application
   res.header(
     "Access-Control-Allow-Headers",
     "Origin, X-Requested-With, Content-Type, Accept, Authorization"
@@ -42,6 +41,8 @@ app.use((req, res, next) => {
   next();
 });
 
+app.use(express.json());
+app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 import userRouter from "./src/router/userRoutes.js";
 import bodyParser from "body-parser";
@@ -50,16 +51,10 @@ import cookieParser from "cookie-parser";
 app.use(`/api/v1/users`, userRouter);
 app.use(`/api/v1/products`, productRouter);
 
-app.use(
-  cors({
-    origin: ["http://localhost:3000", "https://shopsphere-web-v1.vercel.app"],
-    credentials: true,
-  })
-);
+
 
 app.use(bodyParser.json());
-app.use(express.json());
-app.use(cookieParser());
+app.use(cookieParser())
 
 connectDB().then(() => {
   app.listen(4000, () => {
