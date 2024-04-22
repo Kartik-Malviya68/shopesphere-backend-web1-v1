@@ -132,14 +132,31 @@ const getProductsByFilter = async (req, res) => {
     if (req.query.color && req.query.color.length > 0) {
       matchQuery.color = { $in: req.query.color.split(",") };
     }
+
+    if (req.query.genderType && req.query.genderType.length > 0) {
+      matchQuery.genderType = { $in: req.query.genderType.split(",") };
+    }
+
+    // if (req.query.price && req.query.price.length > 0) {
+    //   const priceRange = req.query.price.split(" - ");
+    //   console.log(priceRange);
+    //   if (priceRange.length === 2) {
+    //     console.log(priceRange[0]);
+    //     matchQuery.price = {
+    //       $gte: priceRange[0],
+    //       $lte: priceRange[1],
+    //     };
+    //   } else {
+    //     throw new Error("Invalid price range format");
+    //   }
+    // }
+
     if (req.query.price && req.query.price.length > 0) {
       const priceRange = req.query.price.split(" - ");
-      console.log(priceRange);
       if (priceRange.length === 2) {
-        console.log(priceRange[0]);
         matchQuery.price = {
-          $gte: priceRange[0],
-          $lte: priceRange[1],
+          $gte: parseFloat(priceRange[0]),
+          $lte: parseFloat(priceRange[1]),
         };
       } else {
         throw new Error("Invalid price range format");
