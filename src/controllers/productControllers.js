@@ -95,21 +95,62 @@ const updateProduct = async (req, res) => {
   }
 };
 
+// const getProductsByFilter = async (req, res) => {
+//   try {
+//     let matchQuery = {};
+//     if (req.body.brands && req.body.brands.length > 0) {
+//       matchQuery.brand = { $in: req.body.brands };
+//     }
+//     if (req.body.categories && req.body.categories.length > 0) {
+//       matchQuery.category = { $in: req.body.categories };
+//     }
+//     const products = await Sneaker.aggregate([{ $match: matchQuery }]);
+//     if (!products || products.length === 0) {
+//       return res.status(404).json({ error: "No products found" });
+//     }
+//     res.json(products);
+//     JSON.stringify(products);
+//   } catch (error) {
+//     console.error("Error retrieving products:", error);
+//     res.status(500).json({ error: "Internal server error" });
+//   }
+// };
+
 const getProductsByFilter = async (req, res) => {
   try {
     let matchQuery = {};
-    if (req.body.brands && req.body.brands.length > 0) {
-      matchQuery.brand = { $in: req.body.brands };
+    if (req.query.brands && req.query.brands.length > 0) {
+      matchQuery.brand = { $in: req.query.brands.split(",") };
     }
-    if (req.body.categories && req.body.categories.length > 0) {
-      matchQuery.category = { $in: req.body.categories };
+    if (req.query.style && req.query.style.length > 0) {
+      matchQuery.style = { $in: req.query.style.split(",") };
     }
+
+    if (req.query.genderType && req.query.genderType.length > 0) {
+      matchQuery.genderType = { $in: req.query.genderType.split(",") };
+    }
+    if (req.query.color && req.query.color.length > 0) {
+      matchQuery.color = { $in: req.query.color.split(",") };
+    }
+    if (req.query.price && req.query.price.length > 0) {
+      const priceRange = req.query.price.split(" - ");
+      console.log(priceRange);
+      if (priceRange.length === 2) {
+        console.log(priceRange[0]);
+        matchQuery.price = {
+          $gte: priceRange[0],
+          $lte: priceRange[1],
+        };
+      } else {
+        throw new Error("Invalid price range format");
+      }
+    }
+
     const products = await Sneaker.aggregate([{ $match: matchQuery }]);
     if (!products || products.length === 0) {
       return res.status(404).json({ error: "No products found" });
     }
     res.json(products);
-    JSON.stringify(products);
   } catch (error) {
     console.error("Error retrieving products:", error);
     res.status(500).json({ error: "Internal server error" });

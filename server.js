@@ -58,4 +58,16 @@ connectDB().then(() => {
     console.log(`⚙️ Server is running at port : 4000`);
   });
 });
+
+
+db.your_collection_name.updateMany(
+  { price: { $exists: true } }, // Filter documents with a price field
+  [
+    { 
+      $set: { 
+        price: { $toDouble: "$price" } // Convert price field to double (number)
+      } 
+    }
+  ]
+);
 main();

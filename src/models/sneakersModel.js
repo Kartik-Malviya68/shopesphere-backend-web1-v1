@@ -15,7 +15,7 @@ const sneakersModel = new mongoose.Schema(
       tolowercase: true,
     },
     price: {
-      type: String,
+      type: Number,
       required: true,
     },
     color: [{ type : String , tolowercase: true,}],
