@@ -57,7 +57,7 @@ const registerUser = async (req, res) => {
     });
   }
 
-  res.cookie("token", createdUser.generateAccessToken());
+  res.cookie("token", createdUser.generateAccessToken(), { maxAge: 30 * 24 * 60 * 60 * 1000});
 
   return res
     .status(201)
@@ -104,7 +104,7 @@ const loginUser = async (req, res) => {
     httpOnly: true,
     secure: true,
   };
-  res.cookie("token", accessToken);
+  res.cookie("token", accessToken , { maxAge: 30 * 24 * 60 * 60 * 1000});
   res.status(200).json({
     message: "User logged in successfully",
     loggedInUser,
