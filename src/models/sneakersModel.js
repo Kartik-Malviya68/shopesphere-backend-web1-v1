@@ -18,7 +18,7 @@ const sneakersModel = new mongoose.Schema(
       type: Number,
       required: true,
     },
-    color: [{ type : String , tolowercase: true,}],
+    color: [{ type: String, tolowercase: true }],
     image: [
       {
         type: String,
@@ -27,7 +27,6 @@ const sneakersModel = new mongoose.Schema(
     category: {
       type: String,
       required: true,
-
     },
     description: {
       type: String,
@@ -38,13 +37,12 @@ const sneakersModel = new mongoose.Schema(
       required: true,
     },
     rating: {
-        rating: String,
-        ratingCount: String,
+      rating: String,
+      ratingCount: String,
     },
     style: {
       type: String,
     },
-    
   },
   {
     timestamps: true,
