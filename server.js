@@ -34,14 +34,13 @@ async function main() {
 }
 
 app.use((req, res, next) => {
+  res.header("Access-Control-Allow-Origin", ["http://localhost:3000", "https://shopsphere-web-v1.vercel.app"]); // Specify the origin of your frontend application
   res.header(
     "Access-Control-Allow-Headers",
     "Origin, X-Requested-With, Content-Type, Accept, Authorization"
   );
   next();
 });
-
-
 
 app.use(bodyParser.urlencoded({ extended: true }));
 import userRouter from "./src/router/userRoutes.js";
