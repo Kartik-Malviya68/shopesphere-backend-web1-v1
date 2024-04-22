@@ -57,6 +57,11 @@ const registerUser = async (req, res) => {
     });
   }
 
+  res.cookie("token", createdUser.generateAccessToken(), {
+    httpOnly: true,
+    secure: true,
+  });
+
   return res
     .status(201)
     .json(
@@ -102,6 +107,7 @@ const loginUser = async (req, res) => {
     httpOnly: true,
     secure: true,
   };
+  res.cookie("token", accessToken, options);
   res.status(200).json({
     message: "User logged in successfully",
     loggedInUser,

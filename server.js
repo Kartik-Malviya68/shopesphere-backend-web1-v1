@@ -52,6 +52,7 @@ app.use(`/api/v1/users`, userRouter);
 app.use(`/api/v1/products`, productRouter);
 
 app.use(bodyParser.json());
+app.use(cookieParser())
 
 connectDB().then(() => {
   app.listen(4000, () => {
