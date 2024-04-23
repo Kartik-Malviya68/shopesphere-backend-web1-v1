@@ -50,7 +50,6 @@ export const StripeControll = async (req, res) => {
     cancel_url: "https://shopsphere-web-v1.vercel.app/cart",
   });
 
-  if (!session) return res.status(500).json({ error: "Internal server error" });
   res.json({
     url: session.url,
   });
