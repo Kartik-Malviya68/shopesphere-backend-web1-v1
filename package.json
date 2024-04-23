@@ -4,7 +4,6 @@
   "description": "",
   "type": "module",
   "main": "server.js",
-  
   "scripts": {
     "start": "nodemon server.js"
   },
@@ -21,6 +20,7 @@
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.2.1",
     "mongoose-aggregate-paginate-v2": "^1.0.7",
-    "nodemon": "^3.1.0"
+    "nodemon": "^3.1.0",
+    "stripe": "^15.3.0"
   }
 }

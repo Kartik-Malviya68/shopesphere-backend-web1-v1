@@ -48,13 +48,13 @@ import userRouter from "./src/router/userRoutes.js";
 import bodyParser from "body-parser";
 import cookieParser from "cookie-parser";
 
+import { StripeControll } from "./src/controllers/stripeControllers.js";
 app.use(`/api/v1/users`, userRouter);
 app.use(`/api/v1/products`, productRouter);
-
-
+app.use(`/api/v1/stripe`, StripeControll);
 
 app.use(bodyParser.json());
-app.use(cookieParser())
+app.use(cookieParser());
 
 connectDB().then(() => {
   app.listen(4000, () => {
