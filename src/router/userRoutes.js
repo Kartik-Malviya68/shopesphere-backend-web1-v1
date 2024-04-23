@@ -3,8 +3,10 @@ import userControllers from "../controllers/userControllers.js";
 import getUserData from "../controllers/getUserData.js";
 import { verifyJWT } from "../middlewares/authMddleware.js";
 import cartControllers from "../controllers/cartControllers.js";
+import { StripeControll } from "../controllers/stripeControllers.js";
 
 const router = Router();
+router.route("/create-checkout-session").post(StripeControll);
 router.route("/register").post(userControllers.registerUser);
 router.route("/getUserData").get(getUserData);
 router.route("/login").post(userControllers.loginUser);
