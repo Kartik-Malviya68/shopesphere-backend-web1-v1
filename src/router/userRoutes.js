@@ -20,7 +20,9 @@ router
   .route("/removeFromCart/:id")
   .delete(verifyJWT, cartControllers.removeFromCart);
 //secure routes
-router.route("/updateProductQuantity").put(verifyJWT, cartControllers.updateProductQuantity);
+router
+  .route("/updateProductQuantity")
+  .put(verifyJWT, cartControllers.updateProductQuantity);
 router.route("/logout").post(verifyJWT, userControllers.logoutUser);
 router.route("/refreshAccessToken").post(userControllers.refreshAccessToken);
 router

@@ -75,18 +75,30 @@ const removeFromCart = async (req, res) => {
 
 const updateProductQuantity = async (req, res) => {
   try {
-    const product = await Sneaker.findByIdAndUpdate(
-      req.params.id,
-      { $inc: { quantity: req.body.quantity } },
-      { new: true }
-    );
-    if (!product) {
-      return res.status(404).json({ error: "Product not found" });
+    const { productId, quantity } = req.body;
+    if (!productId || !quantity) {
+      return res
+        .status(400)
+        .json({ message: "productId and quantity required" });
     }
-    res.json(product);
+    const user = req.user;
+    const product = user.cartItems.find((item) => item.productId === productId);
+    if (!product) {
+      return res.status(404).json({ message: "Product not found" });
+    }
+    product.quantity = quantity;
+    await User.findByIdAndUpdate(user._id, { cartItems: user.cartItems });
+
+    res.json({ message: "Quantities updated successfully", user });
   } catch (error) {
-    return res.status(500).json({ error: "Internal server error" });
+    console.error("Error updating quantities:", error);
+    res.status(500).json({ message: "Failed to update quantities" });
   }
 };
 
-export default { addToCart, getCartItems, removeFromCart,updateProductQuantity };
+export default {
+  addToCart,
+  getCartItems,
+  removeFromCart,
+  updateProductQuantity,
+};
