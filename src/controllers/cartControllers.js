@@ -73,4 +73,20 @@ const removeFromCart = async (req, res) => {
   }
 };
 
-export default { addToCart, getCartItems, removeFromCart };
+const updateProductQuantity = async (req, res) => {
+  try {
+    const product = await Sneaker.findByIdAndUpdate(
+      req.params.id,
+      { $inc: { quantity: req.body.quantity } },
+      { new: true }
+    );
+    if (!product) {
+      return res.status(404).json({ error: "Product not found" });
+    }
+    res.json(product);
+  } catch (error) {
+    return res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+export default { addToCart, getCartItems, removeFromCart,updateProductQuantity };
