@@ -29,7 +29,6 @@ export const StripeControll = async (req, res) => {
         minimum: 1,
         maximum: 10,
       },
-      mode: "payment",
       quantity: item.quantity,
     };
   });
