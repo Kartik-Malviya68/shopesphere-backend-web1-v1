@@ -30,6 +30,7 @@ export const StripeControll = async (req, res) => {
         maximum: 10,
       },
       quantity: item.quantity,
+      percent_off: 30,
     };
   });
 
