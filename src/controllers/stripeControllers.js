@@ -8,6 +8,7 @@ export const StripeControll = async (req, res) => {
   const line_items = req.body.data.map((item) => {
     return {
       price_data: {
+        currency: "inr",
         product_data: {
           name: item.name,
           images: [item.img],
@@ -21,9 +22,14 @@ export const StripeControll = async (req, res) => {
         // address: {
         //   country: "IN",
         // },
-        currency: "inr",
         unit_amount: item.price * 100,
       },
+      adjustable_quantity: {
+        enabled: true,
+        minimum: 1,
+        maximum: 10,
+      },
+      mode: "payment",
       quantity: item.quantity,
     };
   });
