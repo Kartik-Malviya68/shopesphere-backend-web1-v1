@@ -22,6 +22,7 @@ export const StripeControll = async (req, res) => {
         // address: {
         //   country: "IN",
         // },
+        percent_off: 30,
         unit_amount: item.price * 100,
       },
       adjustable_quantity: {
@@ -30,7 +31,6 @@ export const StripeControll = async (req, res) => {
         maximum: 10,
       },
       quantity: item.quantity,
-      percent_off: 30,
     };
   });
 
