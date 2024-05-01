@@ -9,6 +9,7 @@ export const StripeControll = async (req, res) => {
     return {
       price_data: {
         currency: "inr",
+        percent_off: 30,
         product_data: {
           name: item.name,
           images: [item.img],
@@ -22,7 +23,7 @@ export const StripeControll = async (req, res) => {
         // address: {
         //   country: "IN",
         // },
-        percent_off: 30,
+
         unit_amount: item.price * 100,
       },
       adjustable_quantity: {
