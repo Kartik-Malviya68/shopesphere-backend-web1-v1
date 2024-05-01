@@ -35,22 +35,8 @@ export const StripeControll = async (req, res) => {
   });
 
   console.log(req.body);
-  const customerName = "John Doe";
   const session = await stripe.checkout.sessions.create({
-    // line_items: [
-    //   {
-    //     price_data: {
-    //       currency: "inr",
-    //       product_data: {
-    //         name: "T-shirt",
-    //       },
-    //       unit_amount: 100,
-    //     },
-    //     quantity: 1,
-    //   },
-    // ],
     line_items,
-    customer: "cus_Pyeg4s7294IQRc",
     mode: "payment",
     success_url: "https://shopsphere-web-v1.vercel.app/checkout-success",
     cancel_url: "https://shopsphere-web-v1.vercel.app/cart",
