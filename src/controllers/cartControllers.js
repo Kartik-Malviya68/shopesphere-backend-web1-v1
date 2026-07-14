@@ -1,15 +1,24 @@
 import { User } from "../models/userModel.js";
-import jwt from "jsonwebtoken";
+
 async function addToCart(req, res) {
   try {
-    const { productId, quantity, size, color, price, name, img } = req.body;
+    const { userId, productId, quantity, size, color, price, name, img } =
+      req.body;
 
-    if ((!productId || !quantity || !size || !color || !price || !name, !img)) {
-      return res
-        .status(400)
-        .json({ message: "productId, quantity, size, color are required" });
+    if (!userId) {
+      return res.status(400).json({ message: "userId is required" });
     }
-    const user = req.user;
+    if (!productId || !quantity || !size || !color || !price || !name || !img) {
+      return res.status(400).json({
+        message:
+          "productId, quantity, size, color, price, name and img are required",
+      });
+    }
+
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
 
     const productExist = user.cartItems.find(
       (item) => item.productId === productId
@@ -17,9 +26,7 @@ async function addToCart(req, res) {
 
     if (productExist) {
       productExist.quantity += quantity;
-    }
-
-    if (!productExist) {
+    } else {
       user.cartItems.push({
         productId,
         quantity,
@@ -44,7 +51,16 @@ async function addToCart(req, res) {
 
 const getCartItems = async (req, res) => {
   try {
-    const user = req.user;
+    const userId = req.query.userId || req.body.userId;
+    if (!userId) {
+      return res.status(400).json({ message: "userId is required" });
+    }
+
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
     res.status(200).json(user.cartItems);
   } catch (error) {
     res.status(500).json({ message: "Internal server error", error });
@@ -53,8 +69,16 @@ const getCartItems = async (req, res) => {
 
 const removeFromCart = async (req, res) => {
   try {
-    const user = req.user;
-    console.log(req.params.id);
+    const userId = req.body.userId || req.query.userId;
+    if (!userId) {
+      return res.status(400).json({ message: "userId is required" });
+    }
+
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
     const index = user.cartItems.findIndex(
       (item) => item._id.toString() === req.params.id
     );
@@ -64,8 +88,7 @@ const removeFromCart = async (req, res) => {
     }
 
     user.cartItems.splice(index, 1);
-
-    await User.findByIdAndUpdate(user, { cartItems: user.cartItems });
+    await user.save();
 
     res.status(200).json({ message: "Product removed from cart" });
   } catch (error) {
@@ -75,19 +98,28 @@ const removeFromCart = async (req, res) => {
 
 const updateProductQuantity = async (req, res) => {
   try {
-    const { productId, quantity } = req.body;
+    const { userId, productId, quantity } = req.body;
+    if (!userId) {
+      return res.status(400).json({ message: "userId is required" });
+    }
     if (!productId || !quantity) {
       return res
         .status(400)
         .json({ message: "productId and quantity required" });
     }
-    const user = req.user;
+
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
     const product = user.cartItems.find((item) => item.productId === productId);
     if (!product) {
       return res.status(404).json({ message: "Product not found" });
     }
+
     product.quantity = quantity;
-    await User.findByIdAndUpdate(user._id, { cartItems: user.cartItems });
+    await user.save();
 
     res.json({ message: "Quantities updated successfully", user });
   } catch (error) {

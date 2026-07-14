@@ -11,15 +11,13 @@ router.route("/stripe/create-checkout-session").post(StripeControll);
 router.route("/register").post(userControllers.registerUser);
 router.route("/getUserData").get(getUserData);
 router.route("/login").post(userControllers.loginUser);
-router.route("/addToCart").post(verifyJWT, cartControllers.addToCart);
-router.route("/getCartItems").get(verifyJWT, cartControllers.getCartItems);
-router
-  .route("/removeFromCart/:id")
-  .delete(verifyJWT, cartControllers.removeFromCart);
-//secure routes
+router.route("/addToCart").post(cartControllers.addToCart);
+router.route("/getCartItems").get(cartControllers.getCartItems);
+router.route("/removeFromCart/:id").delete(cartControllers.removeFromCart);
 router
   .route("/updateProductQuantity")
-  .put(verifyJWT, cartControllers.updateProductQuantity);
+  .put(cartControllers.updateProductQuantity);
+//secure routes
 router.route("/logout").post(verifyJWT, userControllers.logoutUser);
 router.route("/refreshAccessToken").post(userControllers.refreshAccessToken);
 router
