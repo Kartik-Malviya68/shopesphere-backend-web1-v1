@@ -1,11 +1,20 @@
-import express from "express";
 import Stripe from "stripe";
 
-const stripe = Stripe(process.env.STRIPE_SECRET_KEY);
+// Initialize lazily so a missing STRIPE_SECRET_KEY doesn't crash at import time.
+let stripe;
+const getStripe = () => {
+  if (!stripe) {
+    if (!process.env.STRIPE_SECRET_KEY) {
+      throw new Error("STRIPE_SECRET_KEY environment variable is not set");
+    }
+    stripe = Stripe(process.env.STRIPE_SECRET_KEY);
+  }
+  return stripe;
+};
 
 export const StripeControll = async (req, res) => {
-  // app.post("/stripe/create-checkout-session", async (req, res) => {
-  const line_items = req.body.data.map((item) => {
+  try {
+    const line_items = req.body.data.map((item) => {
     return {
       price_data: {
         currency: "inr",
@@ -34,16 +43,18 @@ export const StripeControll = async (req, res) => {
     };
   });
 
-  console.log(req.body);
-  const session = await stripe.checkout.sessions.create({
-    line_items,
-    mode: "payment",
-    success_url: "https://shopsphere-web-v1.vercel.app/checkout-success",
-    cancel_url: "https://shopsphere-web-v1.vercel.app/cart",
-  });
+    const session = await getStripe().checkout.sessions.create({
+      line_items,
+      mode: "payment",
+      success_url: "https://shopsphere-web-v1.vercel.app/checkout-success",
+      cancel_url: "https://shopsphere-web-v1.vercel.app/cart",
+    });
 
-  res.json({
-    url: session.url,
-  });
-  // });
+    res.json({
+      url: session.url,
+    });
+  } catch (error) {
+    console.error("Stripe checkout error:", error);
+    res.status(500).json({ success: false, message: error.message });
+  }
 };

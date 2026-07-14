@@ -3,10 +3,7 @@ import userControllers from "../controllers/userControllers.js";
 import getUserData from "../controllers/getUserData.js";
 import { verifyJWT } from "../middlewares/authMddleware.js";
 import cartControllers from "../controllers/cartControllers.js";
-import stripe from "stripe";
 import { StripeControll } from "../controllers/stripeControllers.js";
-
-const Stripe = stripe(process.env.STRIPE_SECRET_KEY);
 
 const router = Router();
 
